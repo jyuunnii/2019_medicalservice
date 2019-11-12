@@ -1,11 +1,8 @@
 import requests
-import json
 import urllib.request as ul
-import xml.etree.ElementTree as etree
+import json
 import csv
 import xmltodict
-
-
 
 #의료기관별상세정보서비스
 #ykiho = pk
@@ -33,10 +30,17 @@ if(rescode == 200):
     w_data = rDD["response"]["body"]["items"]["item"] #list [{},{},{},...]
     
     for a in w_data:
-        with open("./hospital.csv", "a+") as f:
-            w = csv.DictWriter(f, a.keys())
-            #w.writeheader()
-            w.writerow(a)
+        val = a['ykiho']
+        print(val)
+        values =[]
+        values.append(val)
 
+        with open("./hospital.csv", "a+") as f:
+            #print(list(a.keys())[-1])
+            
+            w = csv.writer(f)
+            #w.writeheader()
+            #             
+            w.writerow(values)
 
    
