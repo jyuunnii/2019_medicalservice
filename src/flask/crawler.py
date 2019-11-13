@@ -30,17 +30,21 @@ if(rescode == 200):
     w_data = rDD["response"]["body"]["items"]["item"] #list [{},{},{},...]
     
     for a in w_data:
-        val = a['ykiho']
-        print(val)
-        values =[]
-        values.append(val)
+        try:
+            hospitalId = a['ykiho']
+            hospitalNm = a['yadmNm']
+            hospitalAd = a['addr']
+            hospitalXpos = a['XPos']
+            hospitalYpos = a['YPos']
+            hospitalDrTotCnt = a['drTotCnt']
 
-        with open("./hospital.csv", "a+") as f:
-            #print(list(a.keys())[-1])
-            
-            w = csv.writer(f)
-            #w.writeheader()
-            #             
-            w.writerow(values)
+            values =[]
+            values.extend((hospitalNm, hospitalAd, hospitalXpos, hospitalYpos, hospitalDrTotCnt, hospitalId))
 
-   
+            with open("./hospital.csv", "a+") as f:
+                w = csv.writer(f)
+                #w.writeheader()           
+                w.writerow(values)
+
+        except KeyError:
+            print(KeyError)
