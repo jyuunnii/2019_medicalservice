@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Patients list</title>
+</head>
+<body>
+    <br/>
+    <h1>환자 명단</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>이름</th>
+                <th>핸드폰 번호</th>
+                <th>진단 기록</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in patients %}
+            <tr>
+                <td>{{ row['name'] }}</td>
+                <td>{{ row['phone'] }}</td>
+                <td>{{ row['record'] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

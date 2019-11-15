@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hospital Administration</title>
+    <script src="https://code.jquery.com/jquery-3.4.1.js"
+    integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+    crossorigin="anonymous"></script>
+    <script>
+    $(document).ready(() =>{
+        $("#register").submit((e)=>{
+            e.preventDefault()
+            let formData= new FormData($("form")[0])
+            $.ajax({
+            type: "POST",
+            url: "/register",
+            cache: false,
+            data:formData,
+            processData: false,
+            contentType:false,
+            success: res => {
+                console.log(res)
+                }
+            })
+        })
+
+        $("#load-patients").click(() =>{
+            $.ajax({
+                url:"patient-list",
+                cache: false
+            }).done(data =>{
+                patients = JSON.parse(data)
+                let tBodyHtml=''
+                for(let row of patients){
+                    tBodyHtml += `<tr>
+                    <td>${row['name']}</td>
+                    <td>${row['phone']}</td>
+                    <td>${row['record']}</td>
+                    <td>${row['date']}</td>
+                    `
+                }
+                $("#patients-table tbody").html(tBodyHtml)
+            })
+        })
+
+        $("#load-reservation").click(() =>{
+            $.ajax({
+                url:"patient-reserve-list",
+                cache: false
+            }).done(data =>{
+                patients = JSON.parse(data)
+                let tBodyHtml=''
+                for(let row of patients){
+                    tBodyHtml += `<tr>
+                    <td>${row['name']}</td>
+                    <td>${row['phone']}</td>
+                    <td>${row['record']}</td>
+                    <td>${row['date']}</td>
+                    `
+                }
+                $("#patients-reserve-table tbody").html(tBodyHtml)
+            })
+        })
+
+        //등록 알람
+        $("#register_btn").click(() => {
+                alert("등록되었습니다");
+            })
+})
+    </script>
+</head>
+<body>
+    This is for hospital administrator.
+</br>
+    <h3>환자 명단 관리</h3>
+    <h4>1) 신규 환자 등록</h4>
+    <form method="POST" id="register">
+        <input type="text" name="name" placeholder="name"/>
+        <input type="text" name="phone" placeholder="phone">
+        <input type="text" name="record" placeholder="medical record">
+        <button type="submit" id="register_btn">등록하기</button>
+    </form>
+   
+</br>    
+<h4>2) 환자 검색 및 삭제</h4>
+<form action="{{url_for('select')}}" id="search" method="POST" target="param">
+    <input type="text" name="name_to_search" placeholder="name"/>
+    <button type="submit">검색하기</button>
+</form>
+<form action="{{url_for('delete')}}" method="POST">
+    <input type="text" name="name_to_delete" placeholder="name"/>
+    <button type="submit">삭제하기</button>
+</form>
+</br>
+    <iframe name="param" frameborder="10" height="100" width="600"></iframe>
+   
+</br>
+   
+    <h4>4) 예약 환자 관리</h4>
+    <button id="load-reservation">조회하기</button>
+    <button type="button" onclick="location.href='prescribe'">처방하기</button>
+    <table id="patients-reserve-table">
+        <thead>
+            <tr>
+                <th>이름</th>
+                <th>핸드폰 번호</th>
+                <th>내용</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</br>   
+    <h4>5) 환자 전체 명단 보기</h4>
+    <button id="load-patients">불러오기</button>
+    <table id="patients-table">
+        <thead>
+            <tr>
+                <th>이름</th>
+                <th>핸드폰 번호</th>
+                <th>진단 기록</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+</body>
+</html>

@@ -8,7 +8,7 @@ import xmltodict
 #ykiho = pk
 
 #병원정보:이름, 주소, 홈페이지, 위치좌표 xy
-ServiceKey = "LkNquBkUjN%2B0CaCfbHYpCajDMmcN3aWbcaKNnnc1KNZjy7QdVJ7kkJIjqHIi7B2EsFOje4DVA9uU5nonq1xTPg%3D%3D"
+ServiceKey = "ohEpJQJYPNYJNVJbBM%2F9V48%2FaUBGwhwVsN4cw0nHeSqXDAeZMHwjlfeAKoen40SxCv5Txz4ek01UgMcmSAZL6w%3D%3D"
 pageNo="1"
 numOfRows="2" #total rows=17670
 url="http://apis.data.go.kr/B551182/hospInfoService/getHospBasisList?pageNo="+pageNo+"&numOfRows="+numOfRows+"&sidoCd=110000&ServiceKey="+ServiceKey

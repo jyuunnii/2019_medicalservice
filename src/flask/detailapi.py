@@ -16,7 +16,7 @@ try:
     for key in a:
         hospitalId = key['hospitalid']
 
-        ServiceKey = "LkNquBkUjN%2B0CaCfbHYpCajDMmcN3aWbcaKNnnc1KNZjy7QdVJ7kkJIjqHIi7B2EsFOje4DVA9uU5nonq1xTPg%3D%3D"
+        ServiceKey = "ohEpJQJYPNYJNVJbBM%2F9V48%2FaUBGwhwVsN4cw0nHeSqXDAeZMHwjlfeAKoen40SxCv5Txz4ek01UgMcmSAZL6w%3D%3D"
         # pageNo="1"
         # numOfRows="25" 
         url="http://apis.data.go.kr/B551182/medicInsttDetailInfoService/getMdlrtSbjectInfoList?kiho="+hospitalId+"&ServiceKey="+ServiceKey
