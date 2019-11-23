@@ -29,6 +29,40 @@ def ykiho_list(table_name):
         print(e)
         return[]
 
+#로그인
+def login(table_name, email, password):
+    sql = f'''SELECT name FROM {table_name} WHERE email='{email}' AND password='{password}';
+    '''
+    print(sql)
+    try:
+        conn=pg.connect(connect_string) 
+        cur=conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+        cur.execute(sql)
+        result=cur.fetchall() 
+      
+        conn.close()
+        return result
+    except Exception as e:
+        print(e)
+        return[]
+
+def typeInsert(table_name, name, customertype):
+    sql = f'''UPDATE {table_name} SET customertype='{customertype}' WHERE name='{name}';
+    '''
+    print(sql)
+    try:
+        conn = pg.connect(connect_string) 
+        cur = conn.cursor() 
+        cur.execute(sql) 
+
+        conn.commit()
+        conn.close()
+    except pg.OperationalError as e:
+        print(e)
+        return -1
+    
+    return 0
+    
 
 #병원
 def patientInsert(table_name, name, phone, record):

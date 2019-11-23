@@ -9,7 +9,7 @@ from pypg import helper
 
 
 try:
-    lists = helper.ykiho_list("hos") #table_name
+    lists = helper.ykiho_list("hos") #table_name 필드 하나만 있을 때 error 적음
     result = json.dumps(lists) #string
     a = json.loads(result) #list
 
@@ -41,7 +41,6 @@ try:
                 for a in w_data:
                     try:
                         hospitalSbj = a['dgsbjtCdNm']
-                        hospitalSbjDrTotCnt = a['dgsbjtPrSdrCnt']
 
                         subjects.append(hospitalSbj)
 
@@ -59,7 +58,7 @@ try:
             
             #진료과목 1과목
             elif type(w_data) is dict:
-                print("진료과목 1개")
+                #print("진료과목 1개")
                 try:
                     hospitalSbj = w_data.get('dgsbjtCdNm')
                     subjects.append(hospitalSbj)

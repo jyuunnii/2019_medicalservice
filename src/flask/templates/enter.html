@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Customer type</title>
+    <style>
+        #header{text-align:center; margin-top:20px;}
+        button{width:200px;}
+    </style>
+</head>
+<body>
+    <div id="header">{{rname}} 님 반갑습니다.</br></br></br>사용자 타입을 설정해주세요.</div>
+    <div id="first-div">
+        <h4>병원 관계자</h4>
+        <ul>
+            <li>현재 예약자 명단 관리</li>
+            <li>방문 환자 이력 관리</li>
+            <li>처방전 작성</li>
+            <li>등록 환자 정보 관리</li>
+            <li>예약 환자 정보 관리</li>
+        </ul>
+        <form action="{{url_for('typeh')}}" method="POST">
+            <input type="hidden" value={{rname}} name="name">
+            <button type="submit">이동하기</button>
+        </form>
+    </div>
+
+    <div id="second-div">
+        <h4>약국 관계자</h4>
+        <ul>
+            <li>방문 환자 이력 관리</li>
+            <li>예약 환자 처방전 확인</li>
+            <li>처방전 작성</li>
+        </ul>
+        <form action="{{url_for('typeph')}}" method="POST">
+            <input type="hidden" value={{rname}} name="name">
+            <button type="submit">이동하기</button>
+        </form>
+    </div>
+
+    <div id="thrid-div">
+        <h4>환자</h4>
+        <ul>
+            <li>병원 검색</li>
+            <li>병원 외래진료 예약</li>
+            <li>병원 처방내역 확인</li>
+            <li>약국 검색</li>
+            <li>약국 방문 예약</li>
+        </ul>
+        <form action="{{url_for('typept')}}" method="POST">
+            <input type="hidden" value={{rname}} name="name">
+            <button type="submit">이동하기</button>
+        </form>
+    </div>
+</body>
+</html>

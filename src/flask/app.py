@@ -5,9 +5,47 @@ import json
 
 app = Flask(__name__)
 
+#로그인 및 사용자 타입 지정
 @app.route('/')
+def main():
+  return render_template("main.html")
+
+@app.route('/login', methods=["POST"])  
 def login():
-  return render_template("login.html")
+  email = request.form.get("email")
+  password = request.form.get("password")
+
+  print(f"{email}님이 로그인 했습니다.")
+  
+  result = helper.login("customer",email,password)
+  rDict = result[0]
+  rname = rDict['name']
+
+  return render_template("enter.html", rname=rname)
+
+
+@app.route('/hospital', methods=["POST"])
+def typeh():
+  name = request.form.get("name")
+  customerType="hospital"
+  print(helper.typeInsert("customer",name,customerType))
+  return render_template("hospital-main.html")
+
+@app.route('/pharmacy', methods=["POST"])
+def typeph():
+  name = request.form.get("name")
+  customerType="pharmacy"
+  print(helper.typeInsert("customer",name,customerType))
+  return render_template("pharmacy-main.html")
+
+@app.route('/patient', methods=["POST"])
+def typept():
+  name = request.form.get("name")
+  customerType="patient"
+  print(helper.typeInsert("customer",name,customerType))
+  return render_template("patient-main.html")
+
+
 
 #병원
 @app.route('/hospital')
