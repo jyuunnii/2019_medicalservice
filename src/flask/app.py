@@ -107,14 +107,42 @@ def patients_reserve_list():
 def prescribe():
   return render_template("prescribe.html")
 
-#환자
-@app.route('/patient')
-def patientMain():
-  return render_template("patient-main.html")
 
-@app.route('/pharmacy')
-def pharmacyMain():
-  return render_template("pharmacy-main.html")
+#환자
+#병원 검색
+@app.route('/select-hospital-name', methods=["POST"])
+def selectHospitalName():
+  name = request.form.get("name")
+  result = helper.selectHospitalName("hospital", name)
+  print(f"{name} 검색중")
+
+  return render_template("list.html", result=result)
+
+@app.route('/select-hospital-subject', methods=["POST"])
+def selectHospitalSubject():
+  subject = request.form.get("subject")
+  result = helper.selectHospitalSubject("hospital", subject)
+
+  print(f"{subject} 검색중")
+
+  return render_template("list.html", result=result)
+
+@app.route('/select-hospital-address', methods=["POST"])
+def selectHospitalAddress():
+  address = request.form.get("address")
+  result = helper.selectHospitalAddress("hospital", address)
+  print(f"{address} 검색중")
+
+  return render_template("list.html", result=result)
+
+@app.route('/send', methods=["POST"])
+def send():
+  name = request.form.get("name")
+  print(f"{name}을 자주가는 병원 목록에 추가했습니다.")
+  print(helper.send("preferlist",name))
+
+  return render_template("list.html")
+
 
 
 

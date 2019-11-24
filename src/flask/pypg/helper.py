@@ -136,4 +136,72 @@ def delete(table_name, name):
     
     return 0
 
+#환자
+def selectHospitalName(table_name, name):
+    sql = f'''SELECT name,address,drcnt,subject,timeweek,timesat  
+    FROM {table_name} WHERE name='{name}';
+    '''
+    print(sql)
+    try:
+        conn=pg.connect(connect_string) 
+        cur=conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+        cur.execute(sql)
+        result=cur.fetchall()  
+       
+        conn.close()
+        return result
+    except Exception as e:
+        print(e)
+        return[]
 
+def selectHospitalAddress(table_name, address):
+    sql = f'''SELECT name,address,drcnt,subject,timeweek,timesat  
+    FROM {table_name} WHERE address LIKE '%{address}%';
+    '''
+    print(sql)
+    try:
+        conn=pg.connect(connect_string) 
+        cur=conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+        cur.execute(sql)
+        result=cur.fetchall()  
+       
+        conn.close()
+        return result
+    except Exception as e:
+        print(e)
+        return[]
+
+def selectHospitalSubject(table_name, subject):
+    sql = f'''SELECT name,address,drcnt,subject,timeweek,timesat  
+    FROM {table_name} WHERE subject LIKE '%{subject}%';
+    '''
+    print(sql)
+    try:
+        conn=pg.connect(connect_string) 
+        cur=conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+        cur.execute(sql)
+        result=cur.fetchall()  
+       
+        conn.close()
+        return result
+    except Exception as e:
+        print(e)
+        return[]
+
+def send(table_name, name):
+    sql = f'''INSERT INTO {table_name} 
+        VALUES('{name}');
+        '''
+    print(sql)
+    try:
+        conn = pg.connect(connect_string) 
+        cur = conn.cursor() 
+        cur.execute(sql) 
+
+        conn.commit()
+        conn.close()
+    except pg.OperationalError as e:
+        print(e)
+        return -1
+    
+    return 0
