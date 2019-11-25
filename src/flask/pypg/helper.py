@@ -245,3 +245,18 @@ def reserve(table_name, customer, name):
     return 0
 
     
+def map(table_name, name):
+    sql = f'''SELECT address FROM hospital WHERE name='{name}';
+    '''
+    print(sql)
+    try:
+        conn=pg.connect(connect_string) 
+        cur=conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+        cur.execute(sql)
+        result=cur.fetchall()  
+       
+        conn.close()
+        return result
+    except Exception as e:
+        print(e)
+        return[]

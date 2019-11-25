@@ -168,6 +168,18 @@ def reserve():
 
   return render_template("list.html")
 
+@app.route('/map', methods=["POST"])
+def mapping():
+  name = request.form.get("name")
+  result = helper.map("hospital",name)
+  print(result)
+  result = result[0]
+  result = result['address']
+  print(f"{name} 지도 위치 검색중")
+  return render_template("map.html",result=result)
+
+
+
 
 
 if __name__ == ("__main__"):
