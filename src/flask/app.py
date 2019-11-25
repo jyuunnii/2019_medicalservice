@@ -1,9 +1,12 @@
 from flask import Flask, render_template, request, redirect, url_for
 from pypg import helper
 import json
+from flask_cors import CORS, cross_origin
 
 
 app = Flask(__name__)
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 #로그인 및 사용자 타입 지정
 @app.route('/')
@@ -29,21 +32,22 @@ def typeh():
   name = request.form.get("name")
   customerType="hospital"
   print(helper.typeInsert("customer",name,customerType))
-  return render_template("hospital-main.html")
+  return render_template("hospital-main.html", name=name)
 
 @app.route('/pharmacy', methods=["POST"])
 def typeph():
   name = request.form.get("name")
   customerType="pharmacy"
   print(helper.typeInsert("customer",name,customerType))
-  return render_template("pharmacy-main.html")
+  return render_template("pharmacy-main.html", name=name)
 
+@cross_origin
 @app.route('/patient', methods=["POST"])
 def typept():
   name = request.form.get("name")
   customerType="patient"
   print(helper.typeInsert("customer",name,customerType))
-  return render_template("patient-main.html")
+  return render_template("patient-main.html",name=name)
 
 
 
@@ -72,8 +76,9 @@ def patients_list_rest():
 
 @app.route('/patient-search', methods=["POST"])
 def select():
-  name = request.form["name_to_search"]
+  name = request.form["name"]
   result = helper.select("patient", name)
+  print(result)
   
   print(f"{name} 님이 검색되었습니다.")
 
@@ -89,12 +94,14 @@ def select():
 
 @app.route('/patient-delete', methods=["POST"])
 def delete():
-    name = request.form["name_to_delete"]
+    name = request.form["name"]
 
     print(f"{name} 삭제")
     print(helper.delete("patient",name))
 
-    return render_template("hospital-main.html")
+    result="삭제되었습니다."
+
+    return result
 
 @app.route("/patient-reserve-list")
 def patients_reserve_list():
@@ -138,11 +145,28 @@ def selectHospitalAddress():
 @app.route('/send', methods=["POST"])
 def send():
   name = request.form.get("name")
-  print(f"{name}을 자주가는 병원 목록에 추가했습니다.")
-  print(helper.send("preferlist",name))
+  customer = request.form.get("customer")
+  print(helper.send("customerrecord",name, customer))
+  print(f"{name}을 {customer}님의 자주가는 병원 목록에 추가했습니다.")
 
   return render_template("list.html")
 
+@app.route('/recent', methods=["POST"])
+def recent():
+  customer = request.form.get("customer")
+  result=helper.recent("customerrecord",customer)
+  print(f"{customer}님의 최근 병원 방문 기록 조회중")
+  
+  return render_template("list.html", result=result)
+
+@app.route('/reserve', methods=["POST"])
+def reserve():
+  name = request.form.get("name")
+  customer = request.form.get("customer")
+  print(helper.reserve("hospitalreservation",customer,name))
+  print(f"{customer}님의 {name} 예약 진행중")
+
+  return render_template("list.html")
 
 
 

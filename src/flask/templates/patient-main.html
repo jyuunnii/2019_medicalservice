@@ -3,10 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Patient Service</title>
-    <script src="https://code.jquery.com/jquery-3.4.1.js"
-    integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
-    crossorigin="anonymous"></script>
-    <style>
+    <style rel="stylesheet" type="text/css">
         #map-box{position:absolute; right: 50px; top: 50px;}
         #user-name{position:absolute; right: 150px; top: 20px;}
         #logout-box{position: absolute; right:50px; top:20px; width:80px;}
@@ -14,13 +11,15 @@
         .description{font-size:13px;}
         h4{margin-bottom: 10px;}
     </style>
+    <script src="http://code.jquery.com/jquery-1.11.0.js"></script>
 </head>
 <body>
     <div id="map-box">
-        <div id="map" style="width:500px; height:400px;"></div>
+        <div id="map" style="width:400px; height:300px;"></div>
+    </br>
         <button id="map-btn">지도 이동하기</button>
         
-        <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=53fb1c2d2e15b48ea7699ede64ee2c3a"></script>
+        <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=bf6497e372f6c1015161ceee815f6a84"></script>
         <script>
             var container = document.getElementById('map');
             var options = {
@@ -28,13 +27,8 @@
                 level: 4
             };
 
-            var map = new kakao.maps.Map(container, options);
+            var map = new kakao.maps.Map(container, options);  
 
-            function panTo() {
-                var moveLatLon = new kakao.maps.LatLng(33.450580, 126.574942);
-            
-                map.panTo(moveLatLon);            
-            }      
         </script>
     </div>
 
@@ -75,7 +69,8 @@
     </li>
 </ul>
 <iframe name="result-box" frameborder="10" height="350" width="800"></iframe>
-<h3>예약 안내</h3>
+
+
 
 </body>
 </html>

@@ -139,7 +139,7 @@ def delete(table_name, name):
 #환자
 def selectHospitalName(table_name, name):
     sql = f'''SELECT name,address,drcnt,subject,timeweek,timesat  
-    FROM {table_name} WHERE name='{name}';
+    FROM {table_name} WHERE name LIKE '%{name}%';
     '''
     print(sql)
     try:
@@ -188,9 +188,9 @@ def selectHospitalSubject(table_name, subject):
         print(e)
         return[]
 
-def send(table_name, name):
-    sql = f'''INSERT INTO {table_name} 
-        VALUES('{name}');
+def send(table_name, name, customer):
+    sql = f'''UPDATE {table_name} SET prefervisitlist=((SELECT prefervisitlist FROM {table_name} WHERE name='{customer}'),'{name}')
+        WHERE name='{customer}';
         '''
     print(sql)
     try:
@@ -205,3 +205,43 @@ def send(table_name, name):
         return -1
     
     return 0
+
+def recent(table_name,customer):
+    sql = f'''SELECT name,address,drcnt,subject,timeweek,timesat  
+    FROM hospital WHERE name=(
+        SELECT name
+        FROM hospitalreservation WHERE patient LIKE '%{customer}%'
+    );
+    '''
+    print(sql)
+    try:
+        conn=pg.connect(connect_string) 
+        cur=conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+        cur.execute(sql)
+        result=cur.fetchall()  
+       
+        conn.close()
+        return result
+    except Exception as e:
+        print(e)
+        return[]
+
+def reserve(table_name, customer, name):
+    sql = f'''UPDATE {table_name} SET patient=((SELECT patient FROM {table_name} WHERE name='{name}'),'{customer}') 
+    WHERE name='{name}'
+    '''
+    print(sql)
+    try:
+        conn = pg.connect(connect_string) 
+        cur = conn.cursor() 
+        cur.execute(sql) 
+
+        conn.commit()
+        conn.close()
+    except pg.OperationalError as e:
+        print(e)
+        return -1
+    
+    return 0
+
+    
