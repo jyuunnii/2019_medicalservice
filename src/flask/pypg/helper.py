@@ -1,5 +1,5 @@
 import psycopg2 as pg
-import psycopg2.extras #field명을 알 때 활용
+import psycopg2.extras 
 
 #docker inside
 db_connector = {
@@ -29,7 +29,8 @@ def ykiho_list(table_name):
         print(e)
         return[]
 
-#로그인
+### 로그인
+
 def login(table_name, email, password):
     sql = f'''SELECT name FROM {table_name} WHERE email='{email}' AND password='{password}';
     '''
@@ -46,6 +47,7 @@ def login(table_name, email, password):
         print(e)
         return[]
 
+#사용자 타입 지정
 def typeInsert(table_name, name, customertype):
     sql = f'''UPDATE {table_name} SET customertype='{customertype}' WHERE name='{name}';
     '''
@@ -64,7 +66,9 @@ def typeInsert(table_name, name, customertype):
     return 0
     
 
-#병원
+#### 병원
+
+#신규 환자 등록
 def patientInsert(table_name, name, phone, record, hospital):
     sql = f'''INSERT INTO {table_name} 
         VALUES('{name}','{phone}', '{record}','{hospital}');
@@ -83,6 +87,7 @@ def patientInsert(table_name, name, phone, record, hospital):
     
     return 0
 
+#환자 검색
 def select(table_name, name, hospital):
     sql = f'''SELECT name, phone, description FROM {table_name} WHERE name LIKE '%{name}%' AND hospital='{hospital}';
     '''
@@ -99,9 +104,9 @@ def select(table_name, name, hospital):
         print(e)
         return[]
 
-
+#환자 관리 및 예약 삭제
 def delete(table_name, name, hospital):
-    sql = f'''DELETE FROM {table_name} WHERE name='{name}' AND hospital='{hospital}';
+    sql = f'''DELETE FROM {table_name} WHERE name='{name}' AND hospital LIKE '%{hospital}%';
     '''
     print(sql)
     try:
@@ -117,6 +122,7 @@ def delete(table_name, name, hospital):
     
     return 0
 
+#예약 조회
 def reserve_list(table_name, hospital):
     sql = f'''SELECT name, phone, symptom, time FROM {table_name} WHERE hospital LIKE '%{hospital}%';
     '''
@@ -133,8 +139,47 @@ def reserve_list(table_name, hospital):
         print(e)
         return[]
 
+#처방
+def save(table_name, hospital, date, name, medicine, volume, times, period):
+    sql = f'''UPDATE {table_name} SET pdate='{date}', pmedicine='{medicine}', pvolume='{volume}', ptimes='{times}', pperiod='{period}' 
+    WHERE name='{name}' AND hospital='{hospital}';
+    '''
+    print(sql)
+    try:
+        conn = pg.connect(connect_string) 
+        cur = conn.cursor() 
+        cur.execute(sql) 
 
-#환자
+        conn.commit()
+        conn.close()
+    except pg.OperationalError as e:
+        print(e)
+        return -1
+    
+    return 0
+
+#예약환자 등록 (방문 확인)
+def check(table_name, name, phone, hospital):
+    sql = f'''INSERT INTO {table_name} 
+        VALUES('{name}','{phone}','','{hospital}');
+        '''
+    print(sql)
+    try:
+        conn = pg.connect(connect_string) 
+        cur = conn.cursor() 
+        cur.execute(sql) 
+
+        conn.commit()
+        conn.close()
+    except pg.OperationalError as e:
+        print(e)
+        return -1
+    
+    return 0
+
+### 환자
+
+#병원 검색
 def selectHospitalName(table_name, name):
     sql = f'''SELECT name,address,drcnt,subject,timeweek,timesat  
     FROM {table_name} WHERE name LIKE '%{name}%';
@@ -186,6 +231,7 @@ def selectHospitalSubject(table_name, subject):
         print(e)
         return[]
 
+#자주가는 병원 등록
 def send(table_name, name, customer):
     sql = f'''UPDATE {table_name} SET prefervisitlist=((SELECT prefervisitlist FROM {table_name} WHERE name='{customer}'),'{name}')
         WHERE name='{customer}';
@@ -204,6 +250,7 @@ def send(table_name, name, customer):
     
     return 0
 
+#최근 방문한 병원 조회
 def recent(table_name,customer):
     sql = f'''SELECT name,address,drcnt,subject,timeweek,timesat  
     FROM hospital WHERE name=(
@@ -224,6 +271,7 @@ def recent(table_name,customer):
         print(e)
         return[]
 
+#병원 예약
 def reserve(table_name, patient, phone, symptom, hospital, time):
     sql = f'''INSERT INTO {table_name}
     VALUES('{patient}','{phone}','{symptom}','{hospital}','{time}')
@@ -242,7 +290,7 @@ def reserve(table_name, patient, phone, symptom, hospital, time):
     
     return 0
 
-    
+#지도 검색
 def map(table_name, name):
     sql = f'''SELECT address FROM hospital WHERE name='{name}';
     '''

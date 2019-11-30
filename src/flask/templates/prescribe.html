@@ -3,11 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <title>Hospital Administration - Prescription</title>
-    <script src="https://code.jquery.com/jquery-3.4.1.js"
-    integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
-    crossorigin="anonymous"></script>
+    <style rel="sytlesheet" type="text/css">
+        body{font-family: 'Courier New', Courier, monospace;}
+        div{text-align: center;}
+        #prescribe_btn{position:absolute; margin-left: 500px;}
+    </style>
 </head>
 <body>
-    This is for prescription
+    
+    <div>처 방 전</div>
+    <form method="POST">
+        <button formaction="{{url_for('save')}}" type="submit" id="prescribe_btn">처방하기</button>
+        <input type="hidden" name="hospital" value="{{hospital}}">
+        <ol>
+            <li>발급 연월일 및 번호 : <input type="date" name="date"></li>
+            <li>환자 성명 : <input type="text" name="patient"></li>
+            <li>
+                <ul>
+                    <li>처방 의약품 명칭 : <input type="text" name="medicine"></li>
+                    <li>1회 투약량 : <input type="text" name="volume"></li>
+                    <li>1회 투여횟수 : <input type="text" name="times"></li>
+                    <li>총 투약일수 : <input type="text" name="period"></li>
+                </ul>
+            </li>
+            <li>의료기관 명칭 : {{hospital}}</li>
+        </ol>  
+    </form>
+    
+  
 </body>
 </html>

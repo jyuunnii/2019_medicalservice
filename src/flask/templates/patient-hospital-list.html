@@ -6,6 +6,7 @@
     <style rel="stylesheet" type="text/css">
     td{font-size:12px; font-family: 'Courier New', Courier, monospace;}
     th{font-size:14px; font-family: 'Courier New', Courier, monospace; text-align: center;}
+    #caution{font-size: 10px; font-family: 'Courier New', Courier, monospace;}
     </style>
 
 </head>
@@ -15,11 +16,13 @@
     <button formaction="{{url_for('send')}}" type="submit">자주가는 병원 등록하기</button>
     <button formaction="{{url_for('recent')}}" type="submit">최근 방문기록 조회하기</button>
     </br>
-    <input type="text" name="patient" placeholder="예약환자 이름">
+    <input type="text" name="patient" placeholder="예약환자명">
     <input type="text" name="patient-phone" placeholder="핸드폰 번호">
     <input type="text" name="patient-symptom" placeholder="증상">
-    <input type="text" name="time" placeholder="진료희망 시간">
+    <input type="text" name="time" placeholder="예약시간">
     <button formaction="{{url_for('reserve')}}" type="submit">병원 예약하기</button>
+
+    <div id="caution">예약시 에약환자명과 예약시간은 반드시 입력해주세요. 입력하지않은 경우 예약이 정상적으로 진행되지 않습니다.</div>
     <table>
         <thead>
             <tr>

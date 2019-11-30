@@ -7,12 +7,14 @@
         body{font-family: 'Courier New', Courier, monospace;}
         #header{font-size:14px;}
         #delete_btn{position: absolute; margin-left:500px;}
+        #check_btn{position: absolute; margin-left: 430px;}
     </style>
 </head>
 <body>
 <form method="POST">
-    <div id="header">{{h}} 예약 환자 내역입니다.</div>
-    <input type="hidden" name="hospital" value="{{h}}">
+    <div id="header">{{hospital}} 예약 환자 내역입니다.</div>
+    <input type="hidden" name="hospital" value="{{hospital}}">
+    <button formaction="{{url_for('check')}}" type="submit" id="check_btn">방문확인</button>
     <button formaction="{{url_for('cancel')}}" type="submit" id="delete_btn">삭제하기</button>
     <table>
         <thead>
@@ -27,7 +29,7 @@
             {% for row in result %}
             <tr>
                 <td><input type="checkbox" name="name" value="{{row['name']}}">{{ row['name'] }}</td>
-                <td>{{ row['phone'] }}</td>
+                <td><input type="hidden" name="phone" value="{{row['phone']}}">{{ row['phone'] }}</td>
                 <td>{{ row['symptom'] }}</td>
                 <td>{{ row['time'] }}</td>
             </tr>

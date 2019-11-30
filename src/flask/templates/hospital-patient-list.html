@@ -11,9 +11,9 @@
 </head>
 <body>
     <form method="POST">
-        <div id="header">{{h}} 등록 환자 내역입니다.</div>
+        <div id="header">{{hospital}} 등록 환자 내역입니다.</div>
         <input type="hidden" name="hospital" value="{{h}}">
-        <button formaction="{{url_for('cancel')}}" type="submit" id="delete_btn">삭제하기</button>
+        <button formaction="{{url_for('delete')}}" type="submit" id="delete_btn">삭제하기</button>
         <table id="table">
                 <thead>
                     <tr>

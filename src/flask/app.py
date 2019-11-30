@@ -2,9 +2,11 @@ from flask import Flask, render_template, request, redirect, url_for
 from pypg import helper
 import json
 
+
 app = Flask(__name__)
 
-#로그인 및 사용자 타입 지정
+
+#------------------------------------------------------- 로그인 및 사용자 타입 지정
 @app.route('/')
 def main():
   return render_template("main.html")
@@ -22,7 +24,7 @@ def login():
 
   return render_template("enter.html", rname=rname)
 
-
+#사용자 타입 지정
 @app.route('/hospital', methods=["POST"])
 def typeh():
   name = request.form.get("name")
@@ -46,11 +48,12 @@ def typept():
 
 
 
-#병원
+#------------------------------------------------------- 병원
 @app.route('/hospital')
 def hospitalMain():
   return render_template("hospital-main.html")
 
+#환자 관리
 @app.route('/register', methods=["POST"])
 def register():
   hospital = request.form.get("hospital")
@@ -75,8 +78,7 @@ def select():
   except:
     print("검색값을 입력해주세요.")
 
-  return render_template("hospital-patient-list.html",result=result, h=hospital)
-
+  return render_template("hospital-patient-list.html",result=result, hospital=hospital)
 
 @app.route('/patient-delete', methods=["POST"])
 def delete():
@@ -87,13 +89,13 @@ def delete():
     print(helper.delete("hospitalvisitrecord", name, hospital))
     print(f"{name} 삭제")
 
-    result="삭제되었습니다."
   except:
     print("삭제할 데이터를 선택해주세요.")
 
-  return result
+  return render_template("hospital-patient-list.html",hospital=hospital)
 
 
+#예약내역 확인
 @app.route('/reserve-admin', methods=["POST"])
 def admin():
   try:
@@ -108,7 +110,23 @@ def admin():
   except:
     print("검색값을 입력해주세요.")
 
-  return render_template("hospital-reserve-list.html", result=result, h=hospital)
+  return render_template("hospital-reserve-list.html", result=result, hospital=hospital)
+
+#예약환자 방문확인
+@app.route('/reserve-check', methods=["POST"])
+def check():
+  try:
+    name = request.form.get("name")
+    phone = request.form.get("phone")
+    hospital = request.form.get("hospital")
+
+    print(helper.check("hospitalvisitrecord", name, phone, hospital))
+    print(f"{name} 방문확인")
+  
+  except:
+    print("확인할 데이터를 선택해주세요.")
+
+  return render_template("hospital-reserve-list.html", hospital=hospital)
 
 @app.route('/reserve-delete', methods=["POST"])
 def cancel():
@@ -126,13 +144,29 @@ def cancel():
 
   return result
 
-@app.route("/prescribe")
+
+#처방
+@app.route("/prescribe", methods=["POST"])
 def prescribe():
-  return render_template("prescribe.html")
+  hospital = request.form.get("hospital")
+  return render_template("prescribe.html", hospital=hospital)
+
+@app.route("/save", methods=["POST"])
+def save():
+  hospital = request.form.get("hospital")
+  date = request.form.get("date")
+  name = request.form.get("patient")
+  medicine = request.form.get("medicine")
+  volume = request.form.get("volume")
+  times = request.form.get("times")
+  period = request.form.get("period")
+
+  print(helper.save("hospitalvisitrecord",hospital,date,name,medicine,volume,times,period))
+
+  return render_template("prescribe.html", hospital=hospital)
 
 
-
-#환자
+#------------------------------------------------------- 환자
 #병원 검색
 @app.route('/select-hospital-name', methods=["POST"])
 def selectHospitalName():
@@ -159,6 +193,7 @@ def selectHospitalAddress():
 
   return render_template("patient-hospital-list.html", result=result)
 
+#자주가는 병원 추가
 @app.route('/send', methods=["POST"])
 def send():
   name = request.form.get("name")
@@ -168,6 +203,7 @@ def send():
 
   return render_template("patient-hospital-list.html")
 
+#최근 병원 방문 조회
 @app.route('/recent', methods=["POST"])
 def recent():
   customer = request.form.get("customer")
@@ -176,6 +212,7 @@ def recent():
   
   return render_template("patient-hospital-list.html", result=result)
 
+#병원예약
 @app.route('/reserve', methods=["POST"])
 def reserve():
   hospital = request.form.get("name")
@@ -188,6 +225,7 @@ def reserve():
 
   return render_template("patient-hospital-list.html")
 
+#지도 검색
 @app.route('/map', methods=["POST"])
 def mapping():
   try:
