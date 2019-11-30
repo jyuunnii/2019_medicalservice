@@ -15,10 +15,11 @@
 </head>
 <body>
     <form method="POST" target="map-box" id="map-form">
-        <input type="text" name="name" placeholder="hospital name">
+        <input type="text" name="name" placeholder="'병원'까지 입력해주세요.">
         <button formaction="{{url_for('mapping')}}" >지도 보기</button>
     </form>
     <iframe name="map-box" frameborder="10" width="400" height="300" id="map-box"></iframe>
+
     <div id="user-name">{{name}}님</div>
     <button id="logout-box"><a href="/">로그아웃</a></button>
     <h3>서울특별시 병원 정보 검색</h3>

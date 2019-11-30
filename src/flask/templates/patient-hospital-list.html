@@ -14,6 +14,11 @@
     <input type="text" name="customer" placeholder="사용자 이름">
     <button formaction="{{url_for('send')}}" type="submit">자주가는 병원 등록하기</button>
     <button formaction="{{url_for('recent')}}" type="submit">최근 방문기록 조회하기</button>
+    </br>
+    <input type="text" name="patient" placeholder="예약환자 이름">
+    <input type="text" name="patient-phone" placeholder="핸드폰 번호">
+    <input type="text" name="patient-symptom" placeholder="증상">
+    <input type="text" name="time" placeholder="진료희망 시간">
     <button formaction="{{url_for('reserve')}}" type="submit">병원 예약하기</button>
     <table>
         <thead>

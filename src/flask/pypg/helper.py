@@ -65,9 +65,9 @@ def typeInsert(table_name, name, customertype):
     
 
 #병원
-def patientInsert(table_name, name, phone, record):
+def patientInsert(table_name, name, phone, record, hospital):
     sql = f'''INSERT INTO {table_name} 
-        VALUES('{name}', '{phone}', '{record}');
+        VALUES('{name}','{phone}', '{record}','{hospital}');
         '''
     print(sql)
     try:
@@ -83,27 +83,8 @@ def patientInsert(table_name, name, phone, record):
     
     return 0
 
-def patients_list(table_name):
-    sql = f'''SELECT name, phone, record FROM {table_name};
-    '''
-    print(sql)
-    try:
-        conn=pg.connect(connect_string) 
-        cur=conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
-        cur.execute(sql)
-        result=cur.fetchall() 
-      
-        conn.close()
-        return result
-    except Exception as e:
-        print(e)
-        return[]
-
-
-
-
-def select(table_name, name):
-    sql = f'''SELECT name, phone, record FROM {table_name} WHERE name LIKE '%{name}%';
+def select(table_name, name, hospital):
+    sql = f'''SELECT name, phone, description FROM {table_name} WHERE name LIKE '%{name}%' AND hospital='{hospital}';
     '''
     print(sql)
     try:
@@ -119,8 +100,8 @@ def select(table_name, name):
         return[]
 
 
-def delete(table_name, name):
-    sql = f'''DELETE FROM {table_name} WHERE name='{name}';
+def delete(table_name, name, hospital):
+    sql = f'''DELETE FROM {table_name} WHERE name='{name}' AND hospital='{hospital}';
     '''
     print(sql)
     try:
@@ -135,6 +116,23 @@ def delete(table_name, name):
         return -1
     
     return 0
+
+def reserve_list(table_name, hospital):
+    sql = f'''SELECT name, phone, symptom, time FROM {table_name} WHERE hospital LIKE '%{hospital}%';
+    '''
+    print(sql)
+    try:
+        conn=pg.connect(connect_string) 
+        cur=conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+        cur.execute(sql)
+        result=cur.fetchall()  
+       
+        conn.close()
+        return result
+    except Exception as e:
+        print(e)
+        return[]
+
 
 #환자
 def selectHospitalName(table_name, name):
@@ -209,8 +207,8 @@ def send(table_name, name, customer):
 def recent(table_name,customer):
     sql = f'''SELECT name,address,drcnt,subject,timeweek,timesat  
     FROM hospital WHERE name=(
-        SELECT name
-        FROM hospitalreservation WHERE patient LIKE '%{customer}%'
+        SELECT hospital
+        FROM reservation WHERE name LIKE '%{customer}%'
     );
     '''
     print(sql)
@@ -226,9 +224,9 @@ def recent(table_name,customer):
         print(e)
         return[]
 
-def reserve(table_name, customer, name):
-    sql = f'''UPDATE {table_name} SET patient=((SELECT patient FROM {table_name} WHERE name='{name}'),'{customer}') 
-    WHERE name='{name}'
+def reserve(table_name, patient, phone, symptom, hospital, time):
+    sql = f'''INSERT INTO {table_name}
+    VALUES('{patient}','{phone}','{symptom}','{hospital}','{time}')
     '''
     print(sql)
     try:

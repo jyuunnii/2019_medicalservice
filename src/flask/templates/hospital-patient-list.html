@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style rel="stylesheet" type="text/css">
+    body{font-family: 'Courier New', Courier, monospace;}
+    #header{font-size:14px;}
+    #delete_btn{position: absolute; margin-left:500px;}
+    </style>
+</head>
+<body>
+    <form method="POST">
+        <div id="header">{{h}} 등록 환자 내역입니다.</div>
+        <input type="hidden" name="hospital" value="{{h}}">
+        <button formaction="{{url_for('cancel')}}" type="submit" id="delete_btn">삭제하기</button>
+        <table id="table">
+                <thead>
+                    <tr>
+                        <th>이름</th>
+                        <th>핸드폰 번호</th>
+                        <th>기타</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in result %}
+                    <tr>
+                        <td><input type="checkbox" name="name" value="{{row['name']}}">{{ row['name'] }}</td>
+                        <td>{{ row['phone'] }}</td>
+                        <td>{{ row['description'] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+    </form>
+</body>
+</html>
