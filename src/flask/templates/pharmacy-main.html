@@ -3,11 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <title>Pharmacy Administrator Service</title>
-    <script src="https://code.jquery.com/jquery-3.4.1.js"
-    integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
-    crossorigin="anonymous"></script>
+    <style rel="stylesheet" type="text/css">
+        #user-name{position:absolute; right: 150px; top: 20px;}
+        #logout-box{position: absolute; right:50px; top:20px; width:80px;}
+        body{font-family: 'Courier New', Courier, monospace;}
+        div{font-size: 14px;}
+    </style>
 </head>
 <body>
-    This is for pharmacy administrator
+    <div id="user-name">{{name}}님</div>
+    <button id="logout-box"><a href="/">로그아웃</a></button>
+    
+    <h4>예약 환자 관리</h4>
+    <div>예약환자에 한해 처방여부 등록 후 처방전을 작성해주세요.
+    </div>
+
+    <form method="POST" target="reserve-box">
+        <input type="text" name="pharmacy" placeholder="약국명">
+        <button formaction="{{url_for('adminMed')}}">조회하기</button>
+    </form>
+    <form method="POST"  target="prescribe-box">
+        <input type="text" name="pharmacy" placeholder="처방 병원명">
+        <input type="text" name="name" placeholder="환자명">
+        <button formaction="{{url_for('prescribeMed')}}">처방전 작성</button>    
+    </form>
+</br>
+    <iframe name="reserve-box" frameborder="10" height="200" width="600"></iframe>
+    <iframe name="prescribe-box" frameborder="10" height="200" width="600"></iframe>
+</br>
+    
 </body>
 </html>

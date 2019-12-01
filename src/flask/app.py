@@ -70,8 +70,9 @@ def register():
 def select():
   try:
     name = request.form.get("name")
+    phone = request.form.get("phone")
     hospital = request.form.get("hospital")
-    result = helper.select("hospitalvisitrecord", name, hospital)
+    result = helper.select("hospitalvisitrecord", name, phone, hospital)
     
     print(f"{name} 님이 검색되었습니다.")
 
@@ -166,6 +167,109 @@ def save():
   return render_template("prescribe.html", hospital=hospital)
 
 
+@app.route("/register-hospital", methods=["POST"])
+def registerHospital():
+  name = request.form.get("name")
+  address = request.form.get("address")
+  drcnt = request.form.get("drcnt")
+  subject = request.form.get("subject")
+  timeweek = request.form.get("timeweek")
+  timesat = request.form.get("timesat")
+
+  print(helper.registerH("hospital",name,address,drcnt,subject,timeweek,timesat))
+
+  return render_template("hospital-main.html")
+
+
+
+#------------------------------------------------------- 약국
+#예약내역 확인
+@app.route('/reserve-admin-ph', methods=["POST"])
+def adminMed():
+  try:
+    pharmacy = request.form.get("pharmacy")
+    result = helper.reserve_list_ph("reservation", pharmacy) 
+
+    print(f"{pharmacy}의 예약내역 검색중")
+
+    if(hospital is ""):
+      result="no data"
+      
+  except:
+    print("검색값을 입력해주세요.")
+
+  return render_template("pharmacy-reserve-list.html", result=result, pharmacy=pharmacy)
+
+
+#예약환자 방문확인
+@app.route('/reserve-check-ph', methods=["POST"])
+def checkMed():
+  try:
+    name = request.form.get("name")
+    pharmacy = request.form.get("pharmacy")
+
+    print(helper.checkMed("hospitalvisitrecord", name, pharmacy))
+    print(f"{name} 방문확인")
+  
+  except:
+    print("확인할 데이터를 선택해주세요.")
+
+  return render_template("pharmacy-reserve-list.html", pharmacy=pharmacy)
+
+@app.route('/finish', methods={"POST"})
+def finish():
+  name = request.form.get("name")
+  print(helper.finish("reservation", name))
+
+  return render_template("pharmacy-reserve-list.html")
+
+
+@app.route('/reserve-delete-ph', methods=["POST"])
+def cancelMed():
+  try:
+    name = request.form.get("name")
+    pharmacy = request.form.get("pharmacy")
+
+    print(helper.deleteMed("reservation", name, pharmacy))
+    print(f"{name} 예약취소")
+
+    result="예약 취소되었습니다."
+
+  except:
+    print("삭제할 데이터를 선택해주세요.")
+
+  return result
+
+@app.route('/prescribe-ph', methods=["POST"])
+def prescribeMed():
+  try:
+    name = request.form.get("name")
+    pharmacy = request.form.get("pharmacy")
+    
+    result = helper.call("hospitalvisitrecord", name, pharmacy)
+  
+  except:
+    print("error")
+  
+  return render_template("prescribe-done.html", result=result, pharmacy=pharmacy)
+
+
+@app.route("/save-ph", methods=["POST"])
+def saveMed():
+  hospital = request.form.get("hospital")
+  patient = request.form.get("patient")
+  pharmacy = request.form.get("pharmacy")
+  date = request.form.get("date")
+  text = request.form.get("text")
+  
+  print(helper.saveMed("hospitalvisitrecord",pharmacy,date,text,hospital,patient))
+
+  return render_template("prescribe-done.html")
+
+
+
+
+
 #------------------------------------------------------- 환자
 #병원 검색
 @app.route('/select-hospital-name', methods=["POST"])
@@ -173,6 +277,14 @@ def selectHospitalName():
   name = request.form.get("name")
   result = helper.selectHospitalName("hospital", name)
   print(f"{name} 검색중")
+
+  return render_template("patient-hospital-list.html", result=result)
+
+@app.route('/select-hospital-address', methods=["POST"])
+def selectHospitalAddress():
+  address = request.form.get("address")
+  result = helper.selectHospitalAddress("hospital", address)
+  print(f"{address} 검색중")
 
   return render_template("patient-hospital-list.html", result=result)
 
@@ -185,13 +297,24 @@ def selectHospitalSubject():
 
   return render_template("patient-hospital-list.html", result=result)
 
-@app.route('/select-hospital-address', methods=["POST"])
-def selectHospitalAddress():
-  address = request.form.get("address")
-  result = helper.selectHospitalAddress("hospital", address)
+
+#약국 검색
+@app.route('/select-pharmacy-name', methods=["POST"])
+def selectPharmacyName():
+  name = request.form.get("phname")
+  result = helper.selectPharmacyName("pharmacy", name)
+  print(f"{name} 검색중")
+
+  return render_template("patient-pharmacy-list.html", result=result)
+
+@app.route('/select-pharmacy-address', methods=["POST"])
+def selectPharmacyAddress():
+  address = request.form.get("phaddress")
+  result = helper.selectPharmacyAddress("pharmacy", address)
   print(f"{address} 검색중")
 
-  return render_template("patient-hospital-list.html", result=result)
+  return render_template("patient-pharmacy-list.html", result=result)
+
 
 #자주가는 병원 추가
 @app.route('/send', methods=["POST"])
@@ -217,13 +340,26 @@ def recent():
 def reserve():
   hospital = request.form.get("name")
   patient = request.form.get("patient")
-  phone = request.form.get("patient-phone")
+  phone = request.form.get("phone")
   symptom = request.form.get("patient-symptom")
   time = request.form.get("time")
   print(helper.reserve("reservation", patient, phone, symptom, hospital, time))
   print(f"{patient}님의 {hospital} 예약 진행중")
 
   return render_template("patient-hospital-list.html")
+
+
+#약국예약
+@app.route('/reserve-med', methods=["POST"])
+def reserveMed():
+  pharmacy = request.form.get("name")
+  patient = request.form.get("patient")
+  phone = request.form.get("phone")
+  time = request.form.get("time")
+  print(helper.reserveMed("reservation", patient, phone, pharmacy, time))
+  print(f"{patient}님의 {pharmacy} 예약 진행중")
+
+  return render_template("patient-pharmacy-list.html")
 
 #지도 검색
 @app.route('/map', methods=["POST"])
@@ -241,7 +377,17 @@ def mapping():
   return render_template("map.html",result=result)
 
 
-
+#처방내역 조회
+@app.route('/record', methods=["POST"])
+def record():
+  try:
+    name = request.form.get("name")
+    result = helper.record("hospitalvisitrecord", name)
+  
+  except:
+    print("처방 내역이 없습니다.")
+  
+  return render_template("patient-prescription.html", result=result, name=name)
 
 
 if __name__ == ("__main__"):

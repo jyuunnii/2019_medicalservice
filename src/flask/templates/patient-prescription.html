@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style rel="stylesheet" type="text/css">
+        body{font-family: 'Courier New', Courier, monospace;}
+        #print_btn{position: absolute; margin-left:730px; margin-top:-20px;}
+        table{border: 1px solid black;}
+        td{border: 1px solid black;}
+        th{border: 1px solid black;}
+    </style>
+</head>
+<body>
+    <div>{{name}} 님의 처방내역 입니다.</div>
+    <button id="print_btn">인쇄하기</button>
+    <table>
+        <thead>
+            <tr>
+                <th>의료기관</th>
+                <th>발급 일자</th>
+                <th>처방 의약품</th>
+                <th>1회 투약량</th>
+                <th>1회 투여횟수</th>
+                <th>1회 투약일수</th>
+                <th>조제기관</th>
+                <th>조제 일자</th>
+                <th>기타 소견</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in result %}
+            <tr>
+                <td><input type="checkbox">{{ row['hospital'] }}</td>
+                <td>{{ row['pdate'] }}</td>
+                <td>{{ row['pmedicine'] }}</td>
+                <td>{{ row['pvolume'] }}</td>
+                <td>{{ row['ptimes'] }}</td>
+                <td>{{ row['pperiod'] }}</td>
+                <td>{{ row['pharmacy'] }}</td>
+                <td>{{ row['phdate'] }}</td>
+                <td>{{ row['description'] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

@@ -7,6 +7,9 @@
     body{font-family: 'Courier New', Courier, monospace;}
     #header{font-size:14px;}
     #delete_btn{position: absolute; margin-left:500px;}
+    table{border: 1px solid black;}
+    td{border: 1px solid black;}
+    th{border: 1px solid black;}
     </style>
 </head>
 <body>
@@ -20,6 +23,7 @@
                         <th>이름</th>
                         <th>핸드폰 번호</th>
                         <th>기타</th>
+                        <th>처방날짜</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -28,6 +32,7 @@
                         <td><input type="checkbox" name="name" value="{{row['name']}}">{{ row['name'] }}</td>
                         <td>{{ row['phone'] }}</td>
                         <td>{{ row['description'] }}</td>
+                        <td>{{ row['pdate'] }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>

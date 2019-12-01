@@ -6,8 +6,7 @@
     <style rel="stylesheet" type="text/css">
         body{font-family: 'Courier New', Courier, monospace;}
         #header{font-size:14px;}
-        #delete_btn{position: absolute; margin-left:500px;}
-        #check_btn{position: absolute; margin-left: 430px;}
+        button{float: right;}
         table{border: 1px solid black;}
         td{border: 1px solid black;}
         th{border: 1px solid black;}
@@ -15,26 +14,27 @@
 </head>
 <body>
 <form method="POST">
-    <div id="header">{{hospital}} 예약 환자 내역입니다.</div>
-    <input type="hidden" name="hospital" value="{{hospital}}">
-    <button formaction="{{url_for('check')}}" type="submit" id="check_btn">방문확인</button>
-    <button formaction="{{url_for('cancel')}}" type="submit" id="delete_btn">삭제하기</button>
+    <div id="header">{{pharmacy}} 예약 환자 내역입니다.</div>
+    <input type="hidden" name="pharmacy" value="{{pharmacy}}">
+    <button formaction="{{url_for('checkMed')}}" type="submit" id="check_btn">처방 전 방문확인</button>
+    <button formaction="{{url_for('finish')}}" type="submit" id="finish-btn">처방완료</button>
+    <button formaction="{{url_for('cancelMed')}}" type="submit" id="delete_btn">삭제하기</button>
     <table>
         <thead>
             <tr>
                 <th>이름</th>
                 <th>핸드폰 번호</th>
-                <th>증상</th>
                 <th>예약시간</th>
+                <th>처방여부</th>
             </tr>
         </thead>
         <tbody>
             {% for row in result %}
             <tr>
                 <td><input type="checkbox" name="name" value="{{row['name']}}">{{ row['name'] }}</td>
-                <td><input type="hidden" name="phone" value="{{row['phone']}}">{{ row['phone'] }}</td>
-                <td>{{ row['symptom'] }}</td>
+                <td>{{ row['phone'] }}</td>
                 <td>{{ row['time'] }}</td>
+                <td>{{ row['prescription'] }}</td>
             </tr>
             {% endfor %}
         </tbody>

@@ -22,22 +22,26 @@
 
     <div id="user-name">{{name}}님</div>
     <button id="logout-box"><a href="/">로그아웃</a></button>
-    <h3>서울특별시 병원 정보 검색</h3>
+    <h3>서울특별시 병원/약국 정보 검색</h3>
     <ul>
         <li>
             <h4>이름으로 검색하기</h4>
-            <div class="description">병원명을 입력해주세요. </br> 주소, 의료진 수, 진료과목, 진료시간을 확인할 수 있습니다.</div>
+            <div class="description">병원명/약국명을 입력해주세요. </br> 주소, 의료진 수, 진료과목, 진료시간을 확인할 수 있습니다.</div>
             <form method="POST" target="result-box">
-                <input type="text" name="name" placeholder="hospital name">
+                <input type="text" name="name" placeholder="의료기관명">
                 <button formaction="{{url_for('selectHospitalName')}}" type="submit">검색하기</button>
+                <input type="text" name="phname" placeholder="약국명">
+                <button formaction="{{url_for('selectPharmacyName')}}" type="submit">검색하기</button>
             </form>
         </li>
         <li>
             <h4>주소로 검색하기(구/동)</h4>
-            <div class="description">주소를 입력해주세요. </br> 병원명, 의료진 수, 진료과목, 진료시간을 확인할 수 있습니다.</div>
+            <div class="description">주소를 입력해주세요. </br> 기관명, 의료진 수, 진료과목, 진료시간을 확인할 수 있습니다.</div>
             <form action="{{url_for('selectHospitalAddress')}}" method="POST" target="result-box">
-                <input type="text" name="address" placeholder="address">
+                <input type="text" name="address" placeholder="의료기관 주소(구/동)">
                 <button type="submit">검색하기</button>
+                <input type="text" name="phaddress" placeholder="약국 주소(구/동)">
+                <button formaction="{{url_for('selectPharmacyAddress')}}" type="submit">검색하기</button>
             </form>
         </li>
         <li>
@@ -49,15 +53,21 @@
             </br>한방내과|한방부인과|한방소아과|한방안·이비인후·피부과|한방신경정신과|침구과|한방재활의학과|사상체질과
             </div>
             <form action="{{url_for('selectHospitalSubject')}}" method="POST" target="result-box" >
-                <input type="text" name="subject" placeholder="treatment">
+                <input type="text" name="subject" placeholder="진료과목">
                 <button type="submit">검색하기</button>
             </form>
             
         </li>
     </ul>
     <iframe name="result-box" frameborder="10" height="350" width="800"></iframe>
-
-
+</br>
+<h4>처방 내역 확인하기</h4>
+<form method="POST" target="prescribe-box">
+    <input type="text" name="name" placeholder="환자명">
+    <button formaction="{{url_for('record')}}" type="submit">확인하기</button>
+</form>
+</br>
+<iframe name="prescribe-box" frameborder="10" height="200" width="800"></iframe>
 
 </body>
 </html>
