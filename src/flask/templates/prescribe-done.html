@@ -16,6 +16,7 @@
         <input type="hidden" name="pharmacy" value="{{pharmacy}}">
         <input type="hidden" name="hospital" value="{{ row['hospital'] }}">
         <input type="hidden" name="patient" value="{{ row['name'] }}">
+        <input type="hidden" name="pdate" value="{{ row['pdate'] }}">
         <button formaction="{{url_for('saveMed')}}" type="submit" id="prescribe_btn">처방하기</button>
         <ol>
             <li>발급 연월일 : {{ row['pdate'] }}</li>

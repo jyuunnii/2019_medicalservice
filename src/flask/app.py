@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for
 from pypg import helper
+import psycopg2
 import json
 
 
@@ -13,16 +14,41 @@ def main():
 
 @app.route('/login', methods=["POST"])  
 def login():
-  email = request.form.get("email")
-  password = request.form.get("password")
+  try:
+    email = request.form.get("email")
+    password = request.form.get("password")
 
-  print(f"{email}님이 로그인 했습니다.")
-  
-  result = helper.login("customer",email,password)
-  rDict = result[0]
-  rname = rDict['name']
+    print(f"{email}님이 로그인 했습니다.")
+    
+    result = helper.login("customer",email,password)
+    rDict = result[0]
+    rname = rDict['name']
+    result="enter.html"
 
-  return render_template("enter.html", rname=rname)
+  except IndexError as e:
+    print(e)
+    rname=""
+    result="main.html"
+
+  return render_template(result, rname=rname)
+
+@app.route('/new', methods=["POST"])
+def new():
+  try:
+    name = request.form.get("name")
+    phone = request.form.get("phone")
+    email = request.form.get("email")
+    password = request.form.get("password")
+    print(helper.new("customer", name, phone, email, password))
+    print(f"{name} 가입완료")
+    result="가입 성공"
+
+  except psycopg2.errors.UniqueViolation as e:
+    print(e)
+    result="가입 실패(중복 사용자, 이메일)"
+
+  return render_template("main.html", result=result)
+
 
 #사용자 타입 지정
 @app.route('/hospital', methods=["POST"])
@@ -154,15 +180,20 @@ def prescribe():
 
 @app.route("/save", methods=["POST"])
 def save():
-  hospital = request.form.get("hospital")
-  date = request.form.get("date")
-  name = request.form.get("patient")
-  medicine = request.form.get("medicine")
-  volume = request.form.get("volume")
-  times = request.form.get("times")
-  period = request.form.get("period")
+  try:
+    hospital = request.form.get("hospital")
+    date = request.form.get("date")
+    name = request.form.get("patient")
+    medicine = request.form.get("medicine")
+    volume = request.form.get("volume")
+    times = request.form.get("times")
+    period = request.form.get("period")
 
-  print(helper.save("hospitalvisitrecord",hospital,date,name,medicine,volume,times,period))
+    print(helper.save("hospitalvisitrecord",hospital,date,name,medicine,volume,times,period))
+
+  except psycopg2.errors.InvalidDatetimeFormat as e:
+    print(e)
+    hospital=""
 
   return render_template("prescribe.html", hospital=hospital)
 
@@ -319,10 +350,10 @@ def selectPharmacyAddress():
 #자주가는 병원 추가
 @app.route('/send', methods=["POST"])
 def send():
-  name = request.form.get("name")
+  hospital = request.form.get("name")
   customer = request.form.get("customer")
-  print(helper.send("customerrecord",name, customer))
-  print(f"{name}을 {customer}님의 자주가는 병원 목록에 추가했습니다.")
+  print(helper.send("customer", customer, hospital))
+  print(f"{hospital}을 {customer}님의 자주가는 병원 목록에 추가했습니다.")
 
   return render_template("patient-hospital-list.html")
 
@@ -330,7 +361,7 @@ def send():
 @app.route('/recent', methods=["POST"])
 def recent():
   customer = request.form.get("customer")
-  result=helper.recent("customerrecord",customer)
+  result=helper.recent("reservation",customer)
   print(f"{customer}님의 최근 병원 방문 기록 조회중")
   
   return render_template("patient-hospital-list.html", result=result)

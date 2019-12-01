@@ -47,6 +47,26 @@ def login(table_name, email, password):
         print(e)
         return[]
 
+def new(table_name, name, phone, email, password):
+    sql = f'''INSERT INTO {table_name} 
+        VALUES('{name}','{phone}','{password}','','','{email}');
+        '''
+    print(sql)
+    try:
+        conn = pg.connect(connect_string) 
+        cur = conn.cursor() 
+        cur.execute(sql) 
+
+        conn.commit()
+        conn.close()
+    except pg.OperationalError as e:
+        print(e)
+        return -1
+    
+    return 0
+
+
+
 #사용자 타입 지정
 def typeInsert(table_name, name, customertype):
     sql = f'''UPDATE {table_name} SET customertype='{customertype}' WHERE name='{name}';
@@ -253,7 +273,7 @@ def deleteMed(table_name, name, pharmacy):
     return 0
 
 def call(table_name, name, pharmacy):
-    sql = f'''SELECT name, hospital, ptimes, pmedicine, pvolume, ptimes, pperiod FROM {table_name} 
+    sql = f'''SELECT name, hospital, pdate, ptimes, pmedicine, pvolume, ptimes, pperiod FROM {table_name} 
     WHERE name=(SELECT name FROM reservation WHERE pharmacy LIKE '%{pharmacy}%');
     '''
     print(sql)
@@ -395,8 +415,8 @@ def selectPharmacyAddress(table_name, address):
 
 
 #자주가는 병원 등록
-def send(table_name, name, customer):
-    sql = f'''UPDATE {table_name} SET prefervisitlist=((SELECT prefervisitlist FROM {table_name} WHERE name='{customer}'),'{name}')
+def send(table_name, customer, hospital):
+    sql = f'''UPDATE {table_name} SET preferlist=((SELECT preferlist FROM {table_name} WHERE name='{customer}'),'{hospital}')
         WHERE name='{customer}';
         '''
     print(sql)
@@ -418,7 +438,7 @@ def recent(table_name,customer):
     sql = f'''SELECT name,address,drcnt,subject,timeweek,timesat  
     FROM hospital WHERE name=(
         SELECT hospital
-        FROM reservation WHERE name LIKE '%{customer}%' LIMIT 1
+        FROM {table_name} WHERE name LIKE '%{customer}%' LIMIT 1
     );
     '''
     print(sql)

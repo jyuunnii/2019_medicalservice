@@ -3,13 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <title>Dr. HYU</title>
+    <style rel="stylesheet" type="text/css">
+        body{text-align: center; margin-top:200px; font-family: 'Courier New', Courier, monospace; font-family: 'Courier New', Courier, monospace;}
+        #caution{position: absolute; margin-top:-170px;}
+    </style>
 </head>
 <body>
+    <div id="caution">{{result}}</div>
     <div>로그인</div>
+</br>
     <form action = "{{url_for('login')}}" id="signin" method="POST">
         <input type="email" name="email" placeholder="email"/>
         <input type="text" name="password" placeholder="password">
         <button type="submit" id="signin_btn">로그인</button>
+    </form>
+</br></br>
+    <div>회원가입</div>
+    <form method="POST" id="register">
+        <input type="text" name="name" placeholder="이름">
+        <input type="text" name="phone" placeholder="핸드폰 번호">
+        <input type="text" name="email" placeholder="이메일">
+        <input type="text" name="password" placeholder="비밀번호">
+        <button formaction="{{url_for('new')}}">가입하기</button>
     </form>
 </br>
 </body>
