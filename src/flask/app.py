@@ -333,7 +333,7 @@ def selectHospitalSubject():
 @app.route('/select-pharmacy-name', methods=["POST"])
 def selectPharmacyName():
   name = request.form.get("phname")
-  result = helper.selectPharmacyName("pharmacy", name)
+  result = helper.selectPharmacyName("pharmacy",name)
   print(f"{name} 검색중")
 
   return render_template("patient-pharmacy-list.html", result=result)

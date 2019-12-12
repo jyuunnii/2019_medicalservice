@@ -274,7 +274,7 @@ def deleteMed(table_name, name, pharmacy):
 
 def call(table_name, name, pharmacy):
     sql = f'''SELECT name, hospital, pdate, ptimes, pmedicine, pvolume, ptimes, pperiod FROM {table_name} 
-    WHERE name=(SELECT name FROM reservation WHERE pharmacy LIKE '%{pharmacy}%' AND name='{name}');
+    WHERE name=(SELECT name FROM reservation WHERE pharmacy LIKE '%{pharmacy}%' AND name='{name}' LIMIT 1) LIMIT 1;
     '''
     print(sql)
     try:
